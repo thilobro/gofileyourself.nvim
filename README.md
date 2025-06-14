@@ -1,6 +1,7 @@
 # gofileyourself-nvim
 
-Neovim plugin for [gofileyourself](https://github.com/thilobro/gofileyourself)
+Neovim plugin for [gofileyourself](https://github.com/thilobro/gofileyourself).
+Based on [ranger.nvim](https://github.com/kelly-lin/ranger.nvim).
 
 ## Lazy Example Config
 

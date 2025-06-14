@@ -56,7 +56,6 @@ local function open_win()
 	vim.api.nvim_buf_set_option(buf, "filetype", "gofileyourself")
 end
 
----Clean up temporary files used to communicate between ranger and the plugin.
 local function clean_up()
 	vim.fn.delete(SELECTED_FILEPATH)
 end
