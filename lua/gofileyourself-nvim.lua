@@ -13,8 +13,8 @@ local M = {}
 local opts = {
 	ui = {
 		border = "none",
-		height = 1,
-		width = 0.6,
+		height = 0.6,
+		width = 1,
 		x = 0.5,
 		y = 0.5,
 	},
