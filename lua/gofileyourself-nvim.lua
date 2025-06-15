@@ -20,6 +20,12 @@ local opts = {
 	},
 }
 
+---@enum OPEN_MODE
+M.OPEN_MODE = {
+	current_buffer = "current_buffer",
+	new_buffer = "new_buffer",
+}
+
 ---@param filepath string
 ---@param open function
 local function open_files(filepath, open)
@@ -56,21 +62,32 @@ local function open_win()
 	vim.api.nvim_buf_set_option(buf, "filetype", "gofileyourself")
 end
 
+---Clean up temporary files used to communicate between ranger and the plugin.
 local function clean_up()
 	vim.fn.delete(SELECTED_FILEPATH)
 end
 
 ---@return function
-local function get_open_func()
+local function get_open_func(mode)
 	local open = {
-		current_win = function(filepath)
+		current_buffer = function(filepath)
+			vim.cmd.bdelete()
+			vim.cmd.edit(filepath)
+		end,
+		new_buffer = function(filepath)
 			vim.cmd.edit(filepath)
 		end,
 	}
-	return open.current_win
+	if mode == M.OPEN_MODE.current_buffer then
+		return open.current_buffer
+	elseif mode == M.OPEN_MODE.new_buffer then
+		return open.new_buffer
+	else
+		return open.new_buffer
+	end
 end
 
-function M.open()
+function M.open(mode)
 	clean_up()
 
 	local cmd = build_gofileyourself_cmd()
@@ -81,7 +98,7 @@ function M.open()
 			vim.api.nvim_win_close(0, true)
 			vim.api.nvim_set_current_win(last_win)
 			if vim.fn.filereadable(SELECTED_FILEPATH) == 1 then
-				open_files(SELECTED_FILEPATH, get_open_func())
+				open_files(SELECTED_FILEPATH, get_open_func(mode))
 			end
 			clean_up()
 		end,
